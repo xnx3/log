@@ -5,7 +5,7 @@ springboot 项目中使用
 #### 1.1 pom.xml 加入
 
 ````
-<!-- 文件上传相关的核心支持，是必须有的 -->
+<!-- 日志的核心支持 https://github.com/xnx3/log -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>core</artifactId>
