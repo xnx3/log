@@ -1,6 +1,9 @@
 package cn.zvo.log.datasource.console;
 
 import java.util.Map;
+
+import com.xnx3.BaseVO;
+
 import cn.zvo.log.LogInterface;
 import cn.zvo.log.vo.LogListVO;
 import net.sf.json.JSONObject;
@@ -10,12 +13,20 @@ import net.sf.json.JSONObject;
  * @author 管雷鸣
  */
 public class ConsoleDataSource implements LogInterface{
+	/**
+	 * 当调用add方法时是否将其日志数据打印出来，默认是是true：打印
+	 */
+	public static boolean print = true;
+	
 	public ConsoleDataSource(Map<String, String> config) {
 	}
 	
 	@Override
 	public void add(Map<String, Object> map) {
-		System.out.println(JSONObject.fromObject(map));
+		if(!print) {
+			return;
+		}
+		System.out.println("log : "+JSONObject.fromObject(map).toString());
 	}
 	
 	@Override
@@ -34,7 +45,7 @@ public class ConsoleDataSource implements LogInterface{
 	 */
 	public LogListVO list(String query,int everyPageNumber, int currentPage) {
 		LogListVO vo = new LogListVO();
-		
+		vo.setBaseVO(BaseVO.FAILURE, "log采用默认的输出到控制台的方式，无获取的方法实现");
 		return vo;
 	}
 
