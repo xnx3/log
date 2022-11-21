@@ -53,6 +53,41 @@ public class Log {
 		this.cacheMaxTime = cacheMaxTime;
 	}
 
+
+	/**
+	 * 判断当前日志使用的是哪种方式
+	 * @param datasourceClass 哪种方式的实现类，如默认带的本地打印为 {@link ConsoleDataSource} ，这里如果要判断是否是使用的控制台打印，可传入 ConsoleDataSource.class
+	 * @return 是否使用
+	 * 			<ul>
+	 * 				<li>true ： 是此种方式</li>
+	 * 				<li>false ： 不是此种方式</li>
+	 * 			</ul>
+	 */
+	public boolean isDataSource(Class datasourceClass){
+		String name = datasourceClass.getSimpleName();
+		return isDataSource(name);
+	}
+	
+
+	/**
+	 * 判断当前日志使用的是哪种方式
+	 * @param storageClassName 方式的实现类的名字，如默认带的本地打印为 {@link ConsoleDataSource} ，这里如果要判断是否是使用的控制台打印，可传入  "ConsoleDataSource"
+	 * @return 是否使用
+	 * 			<ul>
+	 * 				<li>true ： 是此种模式</li>
+	 * 				<li>false ： 不是此种模式</li>
+	 * 			</ul>
+	 */
+	public boolean isDataSource(String datasourceClassName){
+		//取得当前实现的文件的名字，例如本地存储的命名为 LocalServerMode.java ,那这里会取到 LocalServerMode
+		String currentModeFileName = this.getLogInterface().getClass().getSimpleName();
+		if(currentModeFileName.equalsIgnoreCase(datasourceClassName)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * 添加一条日志。
 	 * <br/>（记录在缓存中，还未提交，达到多少条、或多少秒后自动提交，也或者执行 cacheCommit() 手动提交）

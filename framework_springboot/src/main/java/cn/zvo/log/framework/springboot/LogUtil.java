@@ -11,6 +11,7 @@ import com.xnx3.Lang;
 import com.xnx3.ScanClassUtil;
 import cn.zvo.log.Log;
 import cn.zvo.log.LogInterface;
+import cn.zvo.log.datasource.console.ConsoleDataSource;
 import cn.zvo.log.vo.LogListVO;
 
 /**
@@ -63,6 +64,34 @@ public class LogUtil{
 		
 	}
 
+
+	/**
+	 * 判断当前日志使用的是哪种方式
+	 * @param datasourceClass 哪种方式的实现类，如默认带的本地打印为 {@link ConsoleDataSource} ，这里如果要判断是否是使用的控制台打印，可传入 ConsoleDataSource.class
+	 * @return 是否使用
+	 * 			<ul>
+	 * 				<li>true ： 是此种方式</li>
+	 * 				<li>false ： 不是此种方式</li>
+	 * 			</ul>
+	 */
+	public boolean isDataSource(Class datasourceClass){
+		return log.isDataSource(datasourceClass);
+	}
+	
+
+	/**
+	 * 判断当前日志使用的是哪种方式
+	 * @param storageClassName 方式的实现类的名字，如默认带的本地打印为 {@link ConsoleDataSource} ，这里如果要判断是否是使用的控制台打印，可传入  "ConsoleDataSource"
+	 * @return 是否使用
+	 * 			<ul>
+	 * 				<li>true ： 是此种模式</li>
+	 * 				<li>false ： 不是此种模式</li>
+	 * 			</ul>
+	 */
+	public boolean isDataSource(String datasourceClassName){
+		return log.isDataSource(datasourceClassName);
+	}
+	
 
 	/**
 	 * 添加一条日志。
