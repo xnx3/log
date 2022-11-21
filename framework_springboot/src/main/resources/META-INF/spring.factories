@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.zvo.log.framework.springboot.LogUtil
