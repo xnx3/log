@@ -74,7 +74,7 @@ public class LogUtil{
 	 * 				<li>false ： 不是此种方式</li>
 	 * 			</ul>
 	 */
-	public boolean isDataSource(Class datasourceClass){
+	public static boolean isDataSource(Class datasourceClass){
 		return log.isDataSource(datasourceClass);
 	}
 	
@@ -88,7 +88,7 @@ public class LogUtil{
 	 * 				<li>false ： 不是此种模式</li>
 	 * 			</ul>
 	 */
-	public boolean isDataSource(String datasourceClassName){
+	public static boolean isDataSource(String datasourceClassName){
 		return log.isDataSource(datasourceClassName);
 	}
 	
