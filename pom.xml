@@ -44,9 +44,16 @@
 		<url>github.com/xnx3/FileUpload</url>
 	</scm>
 	
-	
-
-	
+	<modules>
+		<!-- 核心实现,带着默认的本地存储的方式 -->
+		<module>core</module>
+		
+		<!-- 使用 elasticsearch -->
+		<module>datasource_elasticsearch</module>
+		
+		<!-- 针对框架：springboot -->
+		<module>framework_springboot</module>
+    </modules>
 	
 	<build>
 		<plugins>
