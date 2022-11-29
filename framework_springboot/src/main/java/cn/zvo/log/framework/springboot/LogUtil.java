@@ -31,6 +31,9 @@ public class LogUtil{
     @PostConstruct
 	public void init() {
 		log = new Log();
+		if(config == null) {
+			return;
+		}
 //		
 		//Log.debug(config.toString());
 		if(config.getCacheMaxNumber() != null && config.getCacheMaxNumber().trim().length() > 0) {
@@ -63,8 +66,17 @@ public class LogUtil{
 		}
 		
 	}
-
-
+    
+    /**
+     * 获取log对象
+     */
+    public static Log getLog() {
+    	if(log == null) {
+    		new LogUtil().init();
+    	}
+    	return log;
+    }
+    
 	/**
 	 * 判断当前日志使用的是哪种方式
 	 * @param datasourceClass 哪种方式的实现类，如默认带的本地打印为 {@link ConsoleDataSource} ，这里如果要判断是否是使用的控制台打印，可传入 ConsoleDataSource.class
@@ -75,7 +87,7 @@ public class LogUtil{
 	 * 			</ul>
 	 */
 	public static boolean isDataSource(Class datasourceClass){
-		return log.isDataSource(datasourceClass);
+		return getLog().isDataSource(datasourceClass);
 	}
 	
 
@@ -89,7 +101,7 @@ public class LogUtil{
 	 * 			</ul>
 	 */
 	public static boolean isDataSource(String datasourceClassName){
-		return log.isDataSource(datasourceClassName);
+		return getLog().isDataSource(datasourceClassName);
 	}
 	
 
@@ -106,7 +118,7 @@ public class LogUtil{
 			return;
 		}
 		
-		log.add(params);
+		getLog().add(params);
 	}
 
 	/**
@@ -114,7 +126,7 @@ public class LogUtil{
 	 * @return true:成功
 	 */
 	public static boolean commit(){
-		return log.commit();
+		return getLog().commit();
 	}
 	
 	/**
@@ -125,7 +137,7 @@ public class LogUtil{
 	 * @return {@link LogListVO}
 	 */
 	public static LogListVO list(String query, int everyPageNumber, int currentPage){
-		return log.list(query, everyPageNumber, currentPage);
+		return getLog().list(query, everyPageNumber, currentPage);
 	}
 	
 }
