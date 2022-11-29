@@ -37,6 +37,18 @@ public class ElasticSearchDataSource implements LogInterface{
 	private String indexName;	//查询的索引名字，类似于mysql的table名字
 	public static ElasticSearchUtil es;
 	
+	/**
+	 * 创建 ElasticSearch 实现
+	 * @param hostname 主机，传入如 127.0.0.1
+	 * @param port 端口，传入如 9200
+	 * @param scheme 协议，传入如 http
+	 * @param username 登录用户名，如果es未设置账号密码，则此项无需传入，传入null即可
+	 * @param password 登录密码，如果es未设置账号密码，则此项无需传入，传入null即可
+	 */
+	public ElasticSearchDataSource(String hostname, int port, String scheme, String username, String password) {
+		init(hostname, port, scheme, username, password);
+	}
+	
 	public ElasticSearchDataSource(Map<String, String> config) {
 		this.indexName = config.get("indexName");
 		
