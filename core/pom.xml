@@ -102,6 +102,13 @@
 	</build>
 	
 	<dependencies>  
+		<!-- Page 分页 https://gitee.com/mail_osc/page.java -->
+		<dependency>
+			<groupId>cn.zvo.page</groupId>
+			<artifactId>page</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
 		<dependency> 
 			<groupId>com.xnx3.util</groupId>
 			<artifactId>xnx3-util</artifactId>

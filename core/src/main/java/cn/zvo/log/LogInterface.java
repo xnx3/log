@@ -1,7 +1,6 @@
 package cn.zvo.log;
 
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import cn.zvo.log.vo.LogListVO;
 
 /**

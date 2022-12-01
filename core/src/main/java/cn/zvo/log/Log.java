@@ -1,11 +1,7 @@
 package cn.zvo.log;
 
 import java.util.Map;
-
-import org.elasticsearch.discovery.zen.MasterFaultDetection.ThisIsNotTheMasterYouAreLookingForException;
-
 import com.xnx3.DateUtil;
-
 import cn.zvo.log.datasource.console.ConsoleDataSource;
 import cn.zvo.log.vo.LogListVO;
 

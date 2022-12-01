@@ -1,7 +1,8 @@
 package cn.zvo.log.vo;
 
 import com.xnx3.BaseVO;
-import com.xnx3.j2ee.util.Page;
+
+import cn.zvo.page.Page;
 import net.sf.json.JSONArray;
 
 /**
