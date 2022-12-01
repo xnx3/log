@@ -8,13 +8,13 @@ springboot 项目中使用
 <!-- 日志的核心支持 https://github.com/xnx3/log -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
-	<artifactId>core</artifactId>
+	<artifactId>log-core</artifactId>
 	<version>1.0</version>
 </dependency>
 <!-- 在 SpringBoot 框架中的快速使用。 （在不同的框架中使用，这里引入的framework.xxx也不同） -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
-	<artifactId>framework.springboot</artifactId>
+	<artifactId>log-framework-springboot</artifactId>
 	<version>1.0</version>
 </dependency> 
 ````
@@ -51,7 +51,7 @@ log.cacheMaxTime=60
 <!-- 加入elasticsearch的实现。 （使用哪种存储方式，这里artifactId就引入的哪里的 datasource.xxx -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
-	<artifactId>datasource.elasticsearch</artifactId>
+	<artifactId>log-datasource-elasticsearch</artifactId>
 	<version>1.0</version>
 </dependency>
 ````

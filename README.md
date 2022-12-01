@@ -4,13 +4,13 @@
 ## 快速使用
 #### 1. pom.xml 中加入：
 
-如果你只是单纯本地用，用不到像是elasticsearch、阿里云日志服务、Springboot框架的，那你可以只使用 ```` <artifactId>core</artifactId> ```` 这一个核心实现即可
+如果你只是单纯本地用，用不到像是elasticsearch、阿里云日志服务、Springboot框架的，那你可以只使用 ```` <artifactId>log-core</artifactId> ```` 这一个核心实现即可
 
 ````
 <!-- 日志的核心支持 https://github.com/xnx3/log -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
-	<artifactId>core</artifactId>
+	<artifactId>log-core</artifactId>
 	<version>1.0</version>
 </dependency>
 ````
@@ -40,7 +40,7 @@ log.add(params);
 <!-- 加入elasticsearch的实现。 （存储到哪，这里artifactId就引入的哪里的 datasource.xxx 另外，core中默认带控制台将日志实时打印出来） -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
-	<artifactId>datasource.elasticsearch</artifactId>
+	<artifactId>log-datasource-elasticsearch</artifactId>
 	<version>1.0</version>
 </dependency>
 ````
@@ -62,7 +62,7 @@ log.setLogInterface(new ElasticSearchDataSource("127.0.0.1", 9200, "http", null,
 <!-- 在 SpringBoot 框架中的快速使用。 （在不同的框架中使用，这里引入的framework.xxx也不同） -->
 <dependency> 
     <groupId>cn.zvo.log</groupId>
-    <artifactId>framework.springboot</artifactId>
+    <artifactId>log-framework-springboot</artifactId>
     <version>1.0</version>
 </dependency> 
 ````
