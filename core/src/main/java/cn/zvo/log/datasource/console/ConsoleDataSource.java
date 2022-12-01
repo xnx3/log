@@ -1,8 +1,8 @@
 package cn.zvo.log.datasource.console;
 
 import java.util.Map;
-
 import com.xnx3.BaseVO;
+import com.xnx3.Log;
 
 import cn.zvo.log.LogInterface;
 import cn.zvo.log.vo.LogListVO;
@@ -52,5 +52,10 @@ public class ConsoleDataSource implements LogInterface{
 	@Override
 	public int size() {
 		return 0;
+	}
+
+	@Override
+	public void setTable(String name) {
+		Log.debug("The datasource used is ConsoleDataSource. The setTable setting '"+name+"' is invalid and has been ignored.");
 	}
 }

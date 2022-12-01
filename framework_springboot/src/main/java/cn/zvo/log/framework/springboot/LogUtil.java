@@ -1,16 +1,10 @@
 package cn.zvo.log.framework.springboot;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import com.xnx3.Lang;
-import com.xnx3.ScanClassUtil;
-import cn.zvo.log.Log;
-import cn.zvo.log.LogInterface;
 import cn.zvo.log.datasource.console.ConsoleDataSource;
 import cn.zvo.log.vo.LogListVO;
 
@@ -30,41 +24,8 @@ public class LogUtil{
      */
     @PostConstruct
 	public void init() {
-		log = new Log();
-		if(config == null) {
-			return;
-		}
-//		
-		//Log.debug(config.toString());
-		if(config.getCacheMaxNumber() != null && config.getCacheMaxNumber().trim().length() > 0) {
-			log.setCacheMaxNumber(Lang.stringToInt(config.getCacheMaxNumber(), 100));
-		}
-		if(config.getCacheMaxTime() != null && config.getCacheMaxTime().trim().length() > 0) {
-			log.setCacheMaxTime(Lang.stringToInt(config.getCacheMaxTime(), 60));
-		}
-
-		if(config.getDataSource() != null) {
-			for (Map.Entry<String, Map<String, String>> entry : config.getDataSource().entrySet()) {
-				//拼接，取该插件在哪个包
-				String datasourcePackage = "cn.zvo.log.datasource."+entry.getKey();
-				
-				List<Class<?>> classList = ScanClassUtil.getClasses(datasourcePackage);
-				//搜索继承StorageInterface接口的
-				List<Class<?>> logClassList = ScanClassUtil.searchByInterfaceName(classList, "cn.zvo.log.LogInterface");
-				for (int i = 0; i < logClassList.size(); i++) {
-					Class logClass = logClassList.get(i);
-					com.xnx3.Log.debug("log datasource : "+logClass.getName());
-					try {
-						Object newInstance = logClass.getDeclaredConstructor(Map.class).newInstance(entry.getValue());
-						LogInterface logInterface = (LogInterface) newInstance;
-						log.setLogInterface(logInterface);
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException  | NoSuchMethodException | SecurityException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		
+    	log = new Log();
+    	log.loadConfig(this.config); //加载application配置
 	}
     
     /**

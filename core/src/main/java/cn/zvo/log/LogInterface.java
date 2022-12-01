@@ -11,6 +11,21 @@ import cn.zvo.log.vo.LogListVO;
 public interface LogInterface {
 	
 	/**
+	 * 设置日志存储到哪个日志仓库中
+	 * <br/>这里以数据库为例，数据库有多个表，每个表都会存储不同的数据（结构）
+	 * <br/>这里便是每个表代表一个数据仓库。通过设置此，可切换将数据存入不同的数据仓库
+	 * <br/>例如 ：
+	 * 	<ul>
+	 * 		<li>elasticsearch ： 这里便是设置索引的名字，可以将不同的数据存入不同的索引中</li>
+	 * 		<li>阿里云SLS日志服务 ： 这里便是设置的日志库的名字，可将不同的数据存入不同的日志库中</li>
+	 * 		<li>华为云LTS日志服务 ： 这里便是设置的日志流的名字</li>
+	 * 		<li>...</li>
+	 *  </ul>
+	 * @param name
+	 */
+	public void setTable(String name);
+	
+	/**
 	 * 增加一条日志到缓存中，等待提交。这里增加的并不是立即提交。如果想要立即提交，可以设置。。。
 	 * @param map 提交的键值对
 	 */

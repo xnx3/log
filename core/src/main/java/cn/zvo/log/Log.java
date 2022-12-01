@@ -1,6 +1,9 @@
 package cn.zvo.log;
 
 import java.util.Map;
+
+import org.elasticsearch.discovery.zen.MasterFaultDetection.ThisIsNotTheMasterYouAreLookingForException;
+
 import com.xnx3.DateUtil;
 
 import cn.zvo.log.datasource.console.ConsoleDataSource;
@@ -14,7 +17,7 @@ import cn.zvo.log.vo.LogListVO;
 public class Log {
 	
 	/**
-	 * 实现日志服务记录的接口
+	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
 	 */
 	public LogInterface logInterface = null;
 	
@@ -25,6 +28,24 @@ public class Log {
 	//最后一次提交日志的时间 ，动态时间，每次提交日志后，都会重新刷新此时间,13位时间戳
 	public long lastSubmitTime = 0;
 	
+	/**
+	 * 设置日志存储到哪个日志仓库中
+	 * <p>这里以数据库为例解释，以便于理解。数据库有多个表，每个表都会存储不同的数据（结构）</p>
+	 * <p>这里便是每个表代表一个数据仓库。通过设置此，可切换将数据存入不同的数据仓库</p>
+	 * <p>例如 ：
+	 * 	<ul>
+	 * 		<li>elasticsearch ： 这里便是设置索引的名字，可以将不同的数据存入不同的索引中</li>
+	 * 		<li>阿里云SLS日志服务 ： 这里便是设置的日志库的名字，可将不同的数据存入不同的日志库中</li>
+	 * 		<li>华为云LTS日志服务 ： 这里便是设置的日志流的名字</li>
+	 * 		<li>...</li>
+	 *  </ul>
+	 *  </p>
+	 */
+	public String table;
+	
+	/**
+	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
+	 */
 	public LogInterface getLogInterface() {
 		if(logInterface == null) {
 			//没有，默认使用控制台输出方式
@@ -33,8 +54,13 @@ public class Log {
 		return logInterface;
 	}
 
+	/**
+	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
+	 * @param logInterface 
+	 */
 	public void setLogInterface(LogInterface logInterface) {
 		this.logInterface = logInterface;
+		this.logInterface.setTable(this.table);
 	}
 	
 	public int getCacheMaxNumber() {
@@ -53,6 +79,25 @@ public class Log {
 		this.cacheMaxTime = cacheMaxTime;
 	}
 
+	/**
+	 * 设置日志存储到哪个日志仓库中
+	 * <p>这里以数据库为例解释，以便于理解。数据库有多个表，每个表都会存储不同的数据（结构）</p>
+	 * <p>这里便是每个表代表一个数据仓库。通过设置此，可切换将数据存入不同的数据仓库</p>
+	 * <p>例如 ：
+	 * 	<ul>
+	 * 		<li>elasticsearch ： 这里便是设置索引的名字，可以将不同的数据存入不同的索引中</li>
+	 * 		<li>阿里云SLS日志服务 ： 这里便是设置的日志库的名字，可将不同的数据存入不同的日志库中</li>
+	 * 		<li>华为云LTS日志服务 ： 这里便是设置的日志流的名字</li>
+	 * 		<li>...</li>
+	 *  </ul>
+	 *  </p>
+	 * @param name 要存到哪个（如数据表）中，传入其名字
+	 */
+	public void setTable(String name) {
+		this.table = name;
+		this.logInterface.setTable(name);
+	}
+	
 
 	/**
 	 * 判断当前日志使用的是哪种方式
