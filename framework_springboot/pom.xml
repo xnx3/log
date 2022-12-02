@@ -113,7 +113,7 @@
 			<groupId>com.xnx3.wangmarket.wm</groupId>
 			<artifactId>wm</artifactId>
 			<version>2.24</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- springboot -->
@@ -121,7 +121,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<version>2.6.1</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		
 	</dependencies>
