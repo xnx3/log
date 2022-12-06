@@ -1,9 +1,8 @@
 package cn.zvo.log.datasource.console;
 
+import java.util.List;
 import java.util.Map;
 import com.xnx3.BaseVO;
-import com.xnx3.Log;
-
 import cn.zvo.log.LogInterface;
 import cn.zvo.log.vo.LogListVO;
 import net.sf.json.JSONObject;
@@ -22,15 +21,12 @@ public class ConsoleDataSource implements LogInterface{
 	}
 	
 	@Override
-	public void add(Map<String, Object> map) {
-		if(!print) {
-			return;
+	public boolean commit(String table, List<Map<String, Object>> list) {
+		for (int i = 0; i < list.size(); i++) {
+			Map<String, Object> map = list.get(i);
+			System.out.println("-------- log commit --------- ");
+			System.out.println(JSONObject.fromObject(map).toString());
 		}
-		System.out.println("log : "+JSONObject.fromObject(map).toString());
-	}
-	
-	@Override
-	public boolean commit() {
 		return true;
 	}
 
@@ -43,19 +39,20 @@ public class ConsoleDataSource implements LogInterface{
 	 * @param request
 	 * @return 如果失败， vo.getResult() == ActionLogListVO.FAILURE
 	 */
-	public LogListVO list(String query,int everyPageNumber, int currentPage) {
+	public LogListVO list(String table, String query,int everyPageNumber, int currentPage) {
 		LogListVO vo = new LogListVO();
 		vo.setBaseVO(BaseVO.FAILURE, "log采用默认的输出到控制台的方式，无获取的方法实现");
 		return vo;
 	}
+//
+//	@Override
+//	public int size() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public void setTable(String name) {
+//		Log.debug("The datasource used is ConsoleDataSource. The setTable setting '"+name+"' is invalid and has been ignored.");
+//	}
 
-	@Override
-	public int size() {
-		return 0;
-	}
-
-	@Override
-	public void setTable(String name) {
-		Log.debug("The datasource used is ConsoleDataSource. The setTable setting '"+name+"' is invalid and has been ignored.");
-	}
 }

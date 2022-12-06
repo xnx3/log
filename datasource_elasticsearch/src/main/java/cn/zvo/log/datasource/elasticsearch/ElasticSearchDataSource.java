@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.Response;
@@ -16,7 +15,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import com.xnx3.Lang;
-import com.xnx3.Log;
 import com.xnx3.StringUtil;
 import com.xnx3.elasticsearch.ElasticSearchUtil;
 import com.xnx3.elasticsearch.jsonFormat.JsonFormatInterface;
@@ -34,7 +32,7 @@ import net.sf.json.JSONObject;
  */
 public class ElasticSearchDataSource implements LogInterface{
 	public static final int PORT_DEFAULT = 9200;	//默认端口号
-	public String table;	//setTable 的值，查询的索引名字，类似于mysql的table名字
+//	public String table;	//setTable 的值，查询的索引名字，类似于mysql的table名字
 	public static ElasticSearchUtil es;
 	
 	/**
@@ -47,24 +45,20 @@ public class ElasticSearchDataSource implements LogInterface{
 	 * @param indexName 索引名字，理解上类似于数据表的名字，要存储的数据是存到哪个表
 	 */
 	public ElasticSearchDataSource(String hostname, int port, String scheme, String username, String password, String indexName) {
-		init(hostname, port, scheme, username, password, indexName);
+		init(hostname, port, scheme, username, password);
 	}
 	
 	public ElasticSearchDataSource(Map<String, String> config) {
-		String indexName = config.get("indexName");
-		
 		String hostname = config.get("hostname");
 		int port = Lang.stringToInt(config.get("port"), PORT_DEFAULT);
 		String scheme = config.get("scheme");
 		String username = config.get("username");
 		String password = config.get("password");
 		
-		init(hostname, port, scheme, username, password, indexName);
+		init(hostname, port, scheme, username, password);
 	}
 	
-	public void init(String hostname, int port, String scheme, String username, String password, String indexName) {
-		this.table = indexName;
-		
+	public void init(String hostname, int port, String scheme, String username, String password) {
 		//判断是否使用es进行日志记录，条件便是 hostname 是否为空。若为空，则不使用
 		if(hostname != null && hostname.length() > 0){
 			//使用
@@ -76,15 +70,15 @@ public class ElasticSearchDataSource implements LogInterface{
 //			Log.info("log ElasticSearch进行操作记录");
 			
 			//自动检测用户动作的索引是否存在
-			if(!es.existIndex(indexName)){
-				//如果不存在，那么创建
-				try {
-					CreateIndexResponse res = es.createIndex(indexName);
-					Log.info("检测到用户动作的存储索引不存在，已自动创建 " +indexName+ " 索引。");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+//			if(!es.existIndex(indexName)){
+//				//如果不存在，那么创建
+//				try {
+//					CreateIndexResponse res = es.createIndex(indexName);
+//					Log.info("检测到用户动作的存储索引不存在，已自动创建 " +indexName+ " 索引。");
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
 			
 			//重写序列化接口
 			es.setJsonFormatInterface(new JsonFormatInterface() {
@@ -136,20 +130,20 @@ public class ElasticSearchDataSource implements LogInterface{
 		}
 	}
 	
-	@Override
-	public void add(Map<String, Object> map) {
-		if(es == null){
-			//不使用，终止即可
-			return;
-		}
-		
-		es.cache(map, this.table);
-	}
+//	@Override
+//	public void add(Map<String, Object> map) {
+//		if(es == null){
+//			//不使用，终止即可
+//			return;
+//		}
+//		
+//		es.cache(map, this.table);
+//	}
 	
 	@Override
-	public boolean commit() {
-		es.cacheSubmit(this.table);
-		return true;
+	public boolean commit(String table, List<Map<String, Object>> list) {
+		es.cacheMap.put(table, list); //加入缓存
+		return es.cacheSubmit(table);	//提交数据
 	}
 
 	/**
@@ -161,7 +155,7 @@ public class ElasticSearchDataSource implements LogInterface{
 	 * @param request
 	 * @return 如果失败， vo.getResult() == ActionLogListVO.FAILURE
 	 */
-	public LogListVO list(String query,int everyPageNumber, int currentPage) {
+	public LogListVO list(String table, String query,int everyPageNumber, int currentPage) {
 		LogListVO vo = new LogListVO();
 		
 		//统计符合条件的总数量
@@ -173,7 +167,7 @@ public class ElasticSearchDataSource implements LogInterface{
 			QueryBuilder queryBuilder = QueryBuilders.queryStringQuery(query);
 			searchSourceBuilder.query(queryBuilder);
 		}
-		countRequest.indices(this.table).source(searchSourceBuilder);
+		countRequest.indices(table).source(searchSourceBuilder);
 		long count = 0;
 		CountResponse countResponse = null;
 		try {
@@ -194,10 +188,10 @@ public class ElasticSearchDataSource implements LogInterface{
 
 		long max_result_window = 10000;	//默认就是10000
 		try {
-			Response res = es.getRestClient().performRequest(new Request("GET", "/"+this.table+"/_settings"));
+			Response res = es.getRestClient().performRequest(new Request("GET", "/"+table+"/_settings"));
 			String text = StringUtil.inputStreamToString(res.getEntity().getContent(), "UTF-8");
 			JSONObject setJson = JSONObject.fromObject(text);
-			JSONObject indexJson = setJson.getJSONObject(this.table).getJSONObject("settings").getJSONObject("index");
+			JSONObject indexJson = setJson.getJSONObject(table).getJSONObject("settings").getJSONObject("index");
 			if(indexJson.get("max_result_window") != null){
 				//自己单独设置过 max_result_window
 				max_result_window = indexJson.getLong("max_result_window");
@@ -210,12 +204,12 @@ public class ElasticSearchDataSource implements LogInterface{
 		int limitStart = (currentPage-1)*everyPageNumber;	//开始的limit
 		if((limitStart + limitNumber) > max_result_window){
 			vo.setBaseVO(ActionLogListVO.FAILURE, "显示最大条数超过系统预设优化的最大条数"+max_result_window+"条。");
-			ConsoleUtil.log("显示最大条数超过系统预设优化的最大条数"+max_result_window+"条。你可以设置ElasticSearch中，"+this.table+"索引的max_result_window属性来设置更大条数。");
+			ConsoleUtil.log("显示最大条数超过系统预设优化的最大条数"+max_result_window+"条。你可以设置ElasticSearch中，"+table+"索引的max_result_window属性来设置更大条数。");
 			return vo;
 		}
 		
 		//获取查询结果的数据 
-		List<Map<String, Object>> list = es.search(this.table, query, limitStart, limitNumber, SortBuilders.fieldSort("time").order(SortOrder.DESC));
+		List<Map<String, Object>> list = es.search(table, query, limitStart, limitNumber, SortBuilders.fieldSort("time").order(SortOrder.DESC));
 		for (int i = 0; i < list.size(); i++) {
 			Map<String, Object> map = list.get(i);
 			
@@ -232,13 +226,8 @@ public class ElasticSearchDataSource implements LogInterface{
 		return vo;
 	}
 
-	@Override
-	public int size() {
-		return es.cacheMap.size();
-	}
-
-	@Override
-	public void setTable(String name) {
-		this.table = name;
-	}
+//	@Override
+//	public void setTable(String name) {
+//		this.table = name;
+//	}
 }

@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cn.zvo.log</groupId>
-	<artifactId>datasource.aliyunSLS</artifactId>
+	<artifactId>log-datasource-aliyunSLS</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
@@ -104,7 +104,15 @@
 	<dependencies>  
 		<dependency>
 			<groupId>cn.zvo.log</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>log-core</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- 日志的核心支持 https://github.com/xnx3/log -->
+		<dependency> 
+			<groupId>cn.zvo.log</groupId>
+			<artifactId>log-core</artifactId>
 			<version>1.0</version>
 		</dependency>
 		
@@ -113,7 +121,7 @@
 			<groupId>com.xnx3.wangmarket.wm</groupId>
 			<artifactId>wm</artifactId>
 			<version>2.24</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>

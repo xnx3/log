@@ -1,5 +1,8 @@
 package cn.zvo.log;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import com.xnx3.DateUtil;
 import cn.zvo.log.datasource.console.ConsoleDataSource;
@@ -25,6 +28,14 @@ public class Log {
 	public long lastSubmitTime = 0;
 	
 	/**
+	 * 缓存。
+	 * key:  table
+	 * value： 要打包提交的 List
+	 */
+	public Map<String, List<Map<String, Object>>> cacheMap;
+
+	
+	/**
 	 * 设置日志存储到哪个日志仓库中
 	 * <p>这里以数据库为例解释，以便于理解。数据库有多个表，每个表都会存储不同的数据（结构）</p>
 	 * <p>这里便是每个表代表一个数据仓库。通过设置此，可切换将数据存入不同的数据仓库</p>
@@ -38,6 +49,10 @@ public class Log {
 	 *  </p>
 	 */
 	public String table;
+	
+	public Log() {
+		cacheMap = new HashMap<String, List<Map<String,Object>>>();
+	}
 	
 	/**
 	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
@@ -56,7 +71,7 @@ public class Log {
 	 */
 	public void setLogInterface(LogInterface logInterface) {
 		this.logInterface = logInterface;
-		this.logInterface.setTable(this.table);
+//		this.logInterface.setTable(this.table);
 	}
 	
 	public int getCacheMaxNumber() {
@@ -91,7 +106,7 @@ public class Log {
 	 */
 	public void setTable(String name) {
 		this.table = name;
-		this.logInterface.setTable(name);
+//		this.logInterface.setTable(name);
 	}
 	
 
@@ -130,9 +145,10 @@ public class Log {
 	}
 	
 	/**
-	 * 添加一条日志。
-	 * <br/>（记录在缓存中，还未提交，达到多少条、或多少秒后自动提交，也或者执行 cacheCommit() 手动提交）
-	 * @param params 日志主体，传入要保存的键值对。
+	 * 添加一条日志。将之提交到缓存中，等积累到一定条件（条数、时间）之后，在一起将Java缓存中的日志打包一次性提交上去
+	 * <p>默认缓存最大条数是100条，达到100条会自动提交到 。 这个最大条数，可以通过  {@link #setCacheMaxNumber(int)} 进行设置。建议不要超过4000条 </p>
+	 * <p>如果你想调用此方法后不经过缓存而立即提交，您可设置 {@link #setCacheMaxNumber(int)} 为1即可</p>
+	 * @param params 要增加的日志数据，key-value形式。 其中map.value 支持的类型有 String、int、long、float、double、boolean
 	 */
 	public synchronized void add(Map<String, Object> params){
 		if(params == null){
@@ -142,10 +158,37 @@ public class Log {
 			return;
 		}
 		
-		getLogInterface().add(params);
+		List<Map<String,Object>> list = cacheMap.get(this.table);
+		if(list == null){
+			list = new LinkedList<Map<String,Object>>();
+		}
+		list.add(params);
+		
+//		if(list.size() >= this.cacheMaxNumber){
+//			//提交
+//			boolean submit = commit();
+//			if(submit){
+//				//提交成功，那么清空indexName的list
+//				list.clear();
+//			}
+//		}
+		
+		//重新赋予cacheMap
+		cacheMap.put(this.table, list);
+		
+//		getLogInterface().add(params);
 		checkCommit();	//检测是否要提交
 	}
 
+
+	/**
+	 * 缓存中得日志条数，也就是通过 add 添加后，但还未调用commit进行提交得日志条数，待提交日志得条数
+	 * @return 数字，条数
+	 */
+	public int size() {
+		return cacheMap.get(this.table).size();
+	}
+	
 	private void checkCommit() {
 		checkCommit(false);
 	}
@@ -155,7 +198,7 @@ public class Log {
 	 * @param submit 是否是要直接进行提交？true则是直接提交缓存数据，不经过时间、条数判断。
 	 */
 	private void checkCommit(boolean submit) {
-		int currentCacheSize = getLogInterface().size();	//当前缓存中得日志条数
+		int currentCacheSize = size();	//当前缓存中得日志条数
 		long currentTime = DateUtil.timeForUnix13();	//当前时刻得13位时间戳
 		
 		if(!submit) {
@@ -171,16 +214,21 @@ public class Log {
 		
 		if(submit){
 			this.lastSubmitTime = currentTime;	//赋予最后一次提交时间
-			commit();
+			boolean submitResult = commit();
+			if(submitResult){
+				//提交成功，那么清空 table 的list
+				cacheMap.put(this.table, new LinkedList<Map<String,Object>>());
+			}
 		}
 	}
 	
 	/**
 	 * 将缓存中的日志立即提交
+	 * <p>一般情况下，此用不到，有 {@link #add(Map)} 根据设定的提交条件去自动处理提交 </p>
 	 * @return true:成功
 	 */
 	public boolean commit(){
-		return getLogInterface().commit();
+		return getLogInterface().commit(this.table, this.cacheMap.get(this.table));
 	}
 	
 	/**
@@ -191,7 +239,7 @@ public class Log {
 	 * @return {@link LogListVO}
 	 */
 	public LogListVO list(String query, int everyPageNumber, int currentPage){
-		return getLogInterface().list(query, everyPageNumber, currentPage);
+		return getLogInterface().list(this.table ,query, everyPageNumber, currentPage);
 	}
 	
 }
