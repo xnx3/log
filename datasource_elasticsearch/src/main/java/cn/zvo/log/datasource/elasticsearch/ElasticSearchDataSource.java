@@ -21,7 +21,7 @@ import com.xnx3.elasticsearch.jsonFormat.JsonFormatInterface;
 import com.xnx3.j2ee.Global;
 import com.xnx3.j2ee.util.ConsoleUtil;
 import com.xnx3.j2ee.vo.ActionLogListVO;
-import cn.zvo.log.LogInterface;
+import cn.zvo.log.DatasourceInterface;
 import cn.zvo.log.vo.LogListVO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -30,7 +30,7 @@ import net.sf.json.JSONObject;
  * elasticsearch 模块。这里调试使用的是 7.10.1 版本
  * @author 管雷鸣
  */
-public class ElasticSearchDataSource implements LogInterface{
+public class ElasticSearchDataSource implements DatasourceInterface{
 	public static final int PORT_DEFAULT = 9200;	//默认端口号
 //	public String table;	//setTable 的值，查询的索引名字，类似于mysql的table名字
 	public static ElasticSearchUtil es;

@@ -7,7 +7,7 @@ import java.util.Map;
 import com.aliyun.openservices.log.common.LogContent;
 import com.aliyun.openservices.log.common.LogItem;
 import com.aliyun.openservices.log.exception.LogException;
-import cn.zvo.log.LogInterface;
+import cn.zvo.log.DatasourceInterface;
 import cn.zvo.log.vo.LogListVO;
 import cn.zvo.page.Page;
 import net.sf.json.JSONArray;
@@ -17,7 +17,7 @@ import net.sf.json.JSONArray;
  * @author 管雷鸣
  *
  */
-public class AliyunSLSDataSource implements LogInterface{
+public class AliyunSLSDataSource implements DatasourceInterface{
 	public static final int CACHE_MAX_TIME_DEFAULT = 120;	//默认缓存最大时间120秒，达到120秒时自动提交缓存
 	public static final int CACHE_MAX_NUMBER_DEFAULT = 100;	//默认缓存存储得最大条数，默认100条，缓存中超过100条时会自动提交缓存
 	
@@ -32,7 +32,7 @@ public class AliyunSLSDataSource implements LogInterface{
 		String endpoint = config.get("endpoint");
 		String project = config.get("project");
 //		String logstore = config.get("logstore");
-//		init(hostname, port, scheme, username, password);
+		init(accessKeyId, accessKeySecret, endpoint, project);
 	}
 	
 	public void init(String accessKeyId, String accessKeySecret, String endpoint, String project) {

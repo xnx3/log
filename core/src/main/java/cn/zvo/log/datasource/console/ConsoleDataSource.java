@@ -24,8 +24,8 @@ public class ConsoleDataSource implements LogInterface{
 	public boolean commit(String table, List<Map<String, Object>> list) {
 		for (int i = 0; i < list.size(); i++) {
 			Map<String, Object> map = list.get(i);
-			System.out.println("-------- log commit --------- ");
-			System.out.println(JSONObject.fromObject(map).toString());
+//			System.out.println("-------- log commit --------- ");
+//			System.out.println(JSONObject.fromObject(map).toString());
 		}
 		return true;
 	}
