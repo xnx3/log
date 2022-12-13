@@ -33,7 +33,7 @@ log.add(params);
 [demo_javase/README.md](demo_javase/)
 
 ## 日志存储方式
-默认使用的是控制台打印出日志。可以切换成采用elasticsearch、阿里云sls日志服务、华为云lts日志服务  
+默认使用的是以日志文件形式来存储json格式的日志。可以切换成采用elasticsearch、阿里云sls日志服务、华为云lts日志服务  
 比如使用elasticsearch，则pom.xml 中额外加入：
 
 ````
