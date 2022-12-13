@@ -25,8 +25,18 @@ public class LogUtil{
     @PostConstruct
 	public void init() {
     	log = new Log();
-    	log.loadConfig(this.config); //加载application配置
+    	loadConfig(this.config); //加载application配置
 	}
+    
+
+    /**
+     * 加载配置 {@link ApplicationConfig} （aplication.properties/yml）文件的配置数据，通过其属性来决定使用何种配置。
+     * <br>这个其实就相当于用java代码来动态决定配置
+     * @param config
+     */
+    public void loadConfig(ApplicationConfig config) {
+    	log.loadConfig(this.config); //加载application配置
+    }
     
     /**
      * 获取log对象

@@ -3,12 +3,11 @@ package cn.zvo.log.framework.springboot;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.BeanUtils;
-
 import com.xnx3.Lang;
 import com.xnx3.ScanClassUtil;
-import cn.zvo.log.LogInterface;
+
+import cn.zvo.log.DatasourceInterface;
 
 /**
  * 日志
@@ -54,8 +53,8 @@ public class Log extends cn.zvo.log.Log{
 					com.xnx3.Log.debug("log datasource : "+logClass.getName());
 					try {
 						Object newInstance = logClass.getDeclaredConstructor(Map.class).newInstance(entry.getValue());
-						LogInterface logInterface = (LogInterface) newInstance;
-						this.setLogInterface(logInterface);
+						DatasourceInterface datasource = (DatasourceInterface) newInstance;
+						this.setDatasource(datasource);
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException| InvocationTargetException  | NoSuchMethodException | SecurityException e) {
 						e.printStackTrace();
 					}

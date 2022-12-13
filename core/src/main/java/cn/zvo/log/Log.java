@@ -17,8 +17,13 @@ public class Log {
 	
 	/**
 	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
+	 * @deprecated 
 	 */
 	public LogInterface logInterface = null;
+	/**
+	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
+	 */
+	public DatasourceInterface datasource = null;
 	
 	//缓存日志的最大条数。当达到这个条数后，将自动提交日志。默认为100
 	public int cacheMaxNumber = 100;		
@@ -56,24 +61,39 @@ public class Log {
 	
 	/**
 	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
+	 * @deprecated
 	 */
-	public LogInterface getLogInterface() {
-		if(logInterface == null) {
-			//没有，默认使用控制台输出方式
-			logInterface = new ConsoleDataSource(null);
-		}
-		return logInterface;
+	public DatasourceInterface getLogInterface() {
+//		if(logInterface == null) {
+//			//没有，默认使用控制台输出方式
+//			logInterface = new ConsoleDataSource(null);
+//		}
+//		return logInterface;
+		return getDatasource();
 	}
 
 	/**
 	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
 	 * @param logInterface 
 	 */
-	public void setLogInterface(LogInterface logInterface) {
-		this.logInterface = logInterface;
+	public void setLogInterface(DatasourceInterface datasource) {
+//		this.logInterface = logInterface;
 //		this.logInterface.setTable(this.table);
+		setDatasource(datasource);
 	}
 	
+	public DatasourceInterface getDatasource() {
+		if(datasource == null) {
+			//没有，默认使用控制台输出方式
+			datasource = new ConsoleDataSource(null);
+		}
+		return datasource;
+	}
+
+	public void setDatasource(DatasourceInterface datasource) {
+		this.datasource = datasource;
+	}
+
 	public int getCacheMaxNumber() {
 		return cacheMaxNumber;
 	}
@@ -202,11 +222,11 @@ public class Log {
 		long currentTime = DateUtil.timeForUnix13();	//当前时刻得13位时间戳
 		
 		if(!submit) {
-			if(currentCacheSize > this.cacheMaxNumber){
+			if(currentCacheSize > this.cacheMaxNumber-1){
 				//超过定义的缓存最大值，那么将缓存中的日志数据进行提交
 				submit = true;
 			}else{
-				if(lastSubmitTime + cacheMaxTime < currentTime){
+				if(lastSubmitTime + cacheMaxTime*1000 < currentTime){
 					submit = true;
 				}
 			}
@@ -228,7 +248,7 @@ public class Log {
 	 * @return true:成功
 	 */
 	public boolean commit(){
-		return getLogInterface().commit(this.table, this.cacheMap.get(this.table));
+		return getDatasource().commit(this.table, this.cacheMap.get(this.table));
 	}
 	
 	/**

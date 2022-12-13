@@ -3,15 +3,14 @@ package cn.zvo.log.datasource.console;
 import java.util.List;
 import java.util.Map;
 import com.xnx3.BaseVO;
-import cn.zvo.log.LogInterface;
+import cn.zvo.log.DatasourceInterface;
 import cn.zvo.log.vo.LogListVO;
-import net.sf.json.JSONObject;
 
 /**
  * Java控制台输出
  * @author 管雷鸣
  */
-public class ConsoleDataSource implements LogInterface{
+public class ConsoleDataSource implements DatasourceInterface{
 	/**
 	 * 当调用add方法时是否将其日志数据打印出来，默认是是true：打印
 	 */

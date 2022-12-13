@@ -203,7 +203,7 @@ public class ElasticSearchDataSource implements DatasourceInterface{
 		//判断最大显示条数是否超过可显示的最大条数
 		int limitStart = (currentPage-1)*everyPageNumber;	//开始的limit
 		if((limitStart + limitNumber) > max_result_window){
-			vo.setBaseVO(ActionLogListVO.FAILURE, "显示最大条数超过系统预设优化的最大条数"+max_result_window+"条。");
+			vo.setBaseVO(ActionLogListVO.FAILURE, "显示最大条数超过系统预设优化的最大条数"+max_result_window+"条。你可以设置ElasticSearch中，当前索引的max_result_window属性来设置更大条数。");
 			ConsoleUtil.log("显示最大条数超过系统预设优化的最大条数"+max_result_window+"条。你可以设置ElasticSearch中，"+table+"索引的max_result_window属性来设置更大条数。");
 			return vo;
 		}

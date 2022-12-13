@@ -53,6 +53,9 @@
 		
 		<!-- 针对框架：springboot -->
 		<module>framework_springboot</module>
+		
+		<!-- demo示例：springboot -->
+		<module>demo_springboot</module>
     </modules>
 	
 	<build>
