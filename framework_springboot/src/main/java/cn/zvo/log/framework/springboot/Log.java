@@ -31,6 +31,9 @@ public class Log extends cn.zvo.log.Log{
 		if(config.getCacheMaxTime() != null && config.getCacheMaxTime().trim().length() > 0) {
 			this.setCacheMaxTime(Lang.stringToInt(config.getCacheMaxTime(), 60));
 		}
+		if(config.getTableName() != null && config.getTableName().trim().length() > 0) {
+			this.setTable(config.getTableName());
+		}
 
 		if(config.getDataSource() != null) {
 			for (Map.Entry<String, Map<String, String>> entry : config.getDataSource().entrySet()) {

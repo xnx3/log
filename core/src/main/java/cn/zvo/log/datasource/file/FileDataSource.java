@@ -10,6 +10,8 @@ import java.util.Scanner;
 import com.xnx3.BaseVO;
 import com.xnx3.DateUtil;
 import com.xnx3.FileUtil;
+import com.xnx3.StringUtil;
+
 import cn.zvo.log.DatasourceInterface;
 import cn.zvo.log.vo.LogListVO;
 import cn.zvo.page.Page;
@@ -22,7 +24,7 @@ import net.sf.json.JSONObject;
  */
 public class FileDataSource implements DatasourceInterface{
 	public String path;	//保存日志的路径，格式如 /mnt/tomcat/webapp_log/ 如果不设置此，则不开启，日志不会写出到日志文件，没任何动作。
-	public String name; //保存日志的文件名，传入如 useraction ，则会自动保存出 useraction_20221206.log  。如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
+//	public String name; //保存日志的文件名，传入如 useraction ，则会自动保存出 useraction_20221206.log  。如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
 	
 	public FileDataSource(Map<String, String> config) {
 		this.path = config.get("path");
@@ -30,13 +32,13 @@ public class FileDataSource implements DatasourceInterface{
 			this.path = null;
 		}
 		
-		this.name = config.get("name");
-		//如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
-		if(this.path != null) {
-			if(this.name == null || this.name.trim().length() == 0) {
-				this.name = "log";
-			}
-		}
+//		this.name = config.get("name");
+//		//如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
+//		if(this.path != null) {
+//			if(this.name == null || this.name.trim().length() == 0) {
+//				this.name = "log";
+//			}
+//		}
 	}
 	
 	@Override
@@ -49,7 +51,7 @@ public class FileDataSource implements DatasourceInterface{
 			sb.append(JSONObject.fromObject(map).toString()+"\n");
 		}
 		if(sb.length() > 0) {
-			FileUtil.appendText(new File(path+name+"_"+DateUtil.currentDate("yyyy-MM-dd_HH")+".log"), sb.toString());
+			FileUtil.appendText(new File(path+table+"_"+DateUtil.currentDate("yyyy-MM-dd")+".log"), sb.toString());
 		}
 		
 		return true;
@@ -73,13 +75,13 @@ public class FileDataSource implements DatasourceInterface{
 			return vo;
 		}
 		
-		//取出当前时刻的日志
+		//取出当前日期的日志，按天存，一天一个日志文件
 		//日志文件
-		String logPath = this.path+name+"_"+DateUtil.currentDate("yyyy-MM-dd_HH")+".log";
+		String logPath = this.path+table+"_"+DateUtil.currentDate("yyyy-MM-dd")+".log";
 		File file = new File(logPath);
 		if(!file.exists()) {
-			//当前小时内日志文件不存在
-			vo.setBaseVO(BaseVO.FAILURE, "log采用默认的文件存储方式，当前这小时的日志文件尚不存在");
+			//当前天内日志文件不存在
+			vo.setBaseVO(BaseVO.FAILURE, "log采用默认的文件存储方式，当天的日志文件尚不存在");
 			return vo;
 		}
 		
@@ -89,7 +91,7 @@ public class FileDataSource implements DatasourceInterface{
 			sc = new Scanner(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			vo.setBaseVO(BaseVO.FAILURE, "log采用默认的文件存储方式，但当前这小时的日志文件尚不存在");
+			vo.setBaseVO(BaseVO.FAILURE, "log采用默认的文件存储方式，但当天的日志文件尚不存在");
 			return vo;
 		}
         
@@ -124,5 +126,50 @@ public class FileDataSource implements DatasourceInterface{
 		return vo;
 	}
 	
+
+	/**
+	 * 目录检测，检测是否存在。若不存在，则自动创建目录。适用于使用本地磁盘进行存储，在本身tomcat中创建目录.有一下两种情况:
+	 * <ul>
+	 * 		<li>在线上的tomcat项目中，创建的目录是在 tomcat/webapps/ROOT/ 目录下</li>
+	 * 		<li>在开发环境Eclipse中，创建的目录是在 target/classes/ 目录下</li>
+	 * </ul>
+	 * @param path 要检测的目录，相对路径，如 jar/file/  创建到file文件，末尾一定加/     或者jar/file/a.jar创建到file文件夹
+	 */
+	public static void directoryInit(String path){
+		if(path == null){
+			return;
+		}
+		
+		//windows取的路径是\，所以要将\替换为/
+		if(path.indexOf("\\") > 1){
+			path = StringUtil.replaceAll(path, "\\\\", "/");
+		}
+		
+		if(path.length() - path.lastIndexOf("/") > 1){
+			//path最后是带了具体文件名的，把具体文件名过滤掉，只留文件/结尾
+			path = path.substring(0, path.lastIndexOf("/")+1);
+		}
+		
+		//如果目录或文件不存在，再进行创建目录的判断
+		if(!new java.io.File(path).exists()){
+			String[] ps = path.split("/");
+			
+			String xiangdui = "";
+			//length-1，/最后面应该就是文件名了，所以要忽略最后一个
+			for (int i = 0; i < ps.length; i++) {
+				if(ps[i].length() > 0){
+					xiangdui = xiangdui + ps[i]+"/";
+					File file = new File(xiangdui);
+					if(!file.exists()){
+						file.mkdir();
+					}
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		directoryInit("C:\\Users\\Administrator\\Desktop\\log1\\");
+	}
 
 }
