@@ -42,7 +42,9 @@ public class LogUtil{
      * 获取log对象
      */
     public static Log getLog() {
+//    	System.out.println("log -- getLog()");
     	if(log == null) {
+    		com.xnx3.Log.debug("log -- LogUtil().init();");
     		new LogUtil().init();
     	}
     	return log;

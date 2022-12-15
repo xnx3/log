@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import com.xnx3.DateUtil;
 import cn.zvo.log.datasource.console.ConsoleDataSource;
+import cn.zvo.log.datasource.file.FileDataSource;
 import cn.zvo.log.vo.LogListVO;
 
 /**
@@ -19,7 +20,7 @@ public class Log {
 	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
 	 * @deprecated 
 	 */
-	public LogInterface logInterface = null;
+//	public LogInterface logInterface = null;
 	/**
 	 * 实现日志服务记录的接口。如 elasticsearch、阿里云SLS日志服务、华为云LTS日志服务……
 	 */
@@ -85,7 +86,7 @@ public class Log {
 	public DatasourceInterface getDatasource() {
 		if(datasource == null) {
 			//没有，默认使用控制台输出方式
-			datasource = new ConsoleDataSource(null);
+			datasource = new FileDataSource(null);
 		}
 		return datasource;
 	}
@@ -233,6 +234,8 @@ public class Log {
 		}
 		
 		if(submit){
+			System.out.println("log submit "+size()+", table:"+table+", datasource:"+getDatasource().getClass().getName());
+			
 			this.lastSubmitTime = currentTime;	//赋予最后一次提交时间
 			boolean submitResult = commit();
 			if(submitResult){

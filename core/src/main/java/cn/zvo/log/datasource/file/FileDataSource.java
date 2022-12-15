@@ -26,7 +26,15 @@ public class FileDataSource implements DatasourceInterface{
 	public String path;	//保存日志的路径，格式如 /mnt/tomcat/webapp_log/ 如果不设置此，则不开启，日志不会写出到日志文件，没任何动作。
 //	public String name; //保存日志的文件名，传入如 useraction ，则会自动保存出 useraction_20221206.log  。如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
 	
+	/**
+	 * 初始化文件方式存储
+	 * @param config 如果传入 null，则是不启用
+	 */
 	public FileDataSource(Map<String, String> config) {
+		if(config == null) {
+			return;
+		}
+		
 		this.path = config.get("path");
 		if(this.path != null && this.path.trim().equals("")) {
 			this.path = null;

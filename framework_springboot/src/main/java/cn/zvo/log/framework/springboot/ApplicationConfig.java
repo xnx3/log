@@ -50,4 +50,10 @@ public class ApplicationConfig {
 		this.cacheMaxTime = cacheMaxTime;
 	}
 	
+	@Override
+	public String toString() {
+		return "ApplicationConfig [dataSource=" + dataSource + ", cacheMaxNumber=" + cacheMaxNumber + ", cacheMaxTime="
+				+ cacheMaxTime + ", tableName=" + tableName + "]";
+	}
+	
 }

@@ -46,11 +46,16 @@ public class Log extends cn.zvo.log.Log{
 					System.err.println(" log 未发现 "+datasourcePackage +" 这个包存在，请确认pom.xml是否加入了这个 datasource 支持模块");
 					System.err.println("====================");
 					continue;
+				}else {
+					for (int i = 0; i < classList.size(); i++) {
+						com.xnx3.Log.debug("class list item : "+classList.get(i).getName());
+					}
 				}
 				
 				//搜索继承StorageInterface接口的
-				List<Class<?>> logClassList = ScanClassUtil.searchByInterfaceName(classList, "cn.zvo.log.LogInterface");
-				logClassList.addAll( ScanClassUtil.searchByInterfaceName(classList, "cn.zvo.log.DatasourceInterface"));
+//				List<Class<?>> logClassList = ScanClassUtil.searchByInterfaceName(classList, "cn.zvo.log.LogInterface");
+//				logClassList.addAll( ScanClassUtil.searchByInterfaceName(classList, "cn.zvo.log.DatasourceInterface"));
+				List<Class<?>> logClassList = ScanClassUtil.searchByInterfaceName(classList, "cn.zvo.log.DatasourceInterface");
 				for (int i = 0; i < logClassList.size(); i++) {
 					Class logClass = logClassList.get(i);
 					com.xnx3.Log.debug("log datasource : "+logClass.getName());

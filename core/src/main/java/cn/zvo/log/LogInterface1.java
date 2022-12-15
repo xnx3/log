@@ -9,7 +9,7 @@ import cn.zvo.log.vo.LogListVO;
  * @author 管雷鸣
  * @deprecated 使用 {@link DatasourceInterface}
  */
-public interface LogInterface {
+public interface LogInterface1 {
 	
 	/**
 	 * 设置日志存储到哪个日志仓库中
