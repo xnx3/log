@@ -1,8 +1,8 @@
 package cn.zvo.log.framework.springboot;
 
 import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import cn.zvo.log.datasource.console.ConsoleDataSource;
@@ -14,20 +14,10 @@ import cn.zvo.log.vo.LogListVO;
  */
 @EnableConfigurationProperties(ApplicationConfig.class)
 @Configuration
-public class LogUtil{
+public class LogUtil implements CommandLineRunner{
 	public static Log log;
-    @Resource
+    @Autowired
     private ApplicationConfig config;
-	
-    /**
-     * springboot启动成功后自动执行初始化
-     */
-    @PostConstruct
-	public void init() {
-    	log = new Log();
-    	loadConfig(this.config); //加载application配置
-	}
-    
 
     /**
      * 加载配置 {@link ApplicationConfig} （aplication.properties/yml）文件的配置数据，通过其属性来决定使用何种配置。
@@ -45,7 +35,11 @@ public class LogUtil{
 //    	System.out.println("log -- getLog()");
     	if(log == null) {
     		com.xnx3.Log.debug("log -- LogUtil().init();");
-    		new LogUtil().init();
+    		try {
+				new LogUtil().run(null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
     	}
     	return log;
     }
@@ -111,6 +105,16 @@ public class LogUtil{
 	 */
 	public static LogListVO list(String query, int everyPageNumber, int currentPage){
 		return getLog().list(query, everyPageNumber, currentPage);
+	}
+
+
+	@Override
+	public void run(String... args) throws Exception {
+		com.xnx3.Log.debug("load log config by application.properties / yml : "+this.config);
+		if(log == null) {
+			log = new Log();
+		}
+    	loadConfig(this.config); //加载application配置
 	}
 	
 }
