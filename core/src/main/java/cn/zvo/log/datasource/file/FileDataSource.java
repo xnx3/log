@@ -51,6 +51,11 @@ public class FileDataSource implements DatasourceInterface{
 	
 	@Override
 	public boolean commit(String table, List<Map<String, Object>> list) {
+		if(this.path == null || this.path.equals("")) {
+			//未开启日志
+			return true;
+		}
+		
 		StringBuffer sb = new StringBuffer();
 		
 //		System.out.println("submit -- "+list.size());
