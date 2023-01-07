@@ -19,12 +19,22 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * 写出到文件输出
+ * 写出日志到文件进行保存
  * @author 管雷鸣
  */
 public class FileDataSource implements DatasourceInterface{
 	public String path;	//保存日志的路径，格式如 /mnt/tomcat/webapp_log/ 如果不设置此，则不开启，日志不会写出到日志文件，没任何动作。
 //	public String name; //保存日志的文件名，传入如 useraction ，则会自动保存出 useraction_20221206.log  。如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
+	
+	/**
+	 * 写出日志到文件进行保存
+	 * @param path 保存日志的目录，格式如 /mnt/tomcat8/logs/ 、或者windows服务器的话路径如 C:\\Users\\Administrator\\Desktop\\log\\  注意最后的斜杠不能拉下。如果不设置此，则不开启，日志不会写出到日志文件，没任何动作。 
+	 * 			如果你服务器是linux，开发环境时windows，为了省事你也可以直接使用linux路径如 /mnt/tomcat8/logs/ 在windows中也能正常运行
+	 * 			每天都会自动创建一个日志文件，当天的日志保存在对应天数的日志文件中。比如你设置的路径是  /mnt/tomcat8/logs/ 那么日志在保存时会自动创建一个文件 /mnt/tomcat8/logs/tablename_yyyy-mm-dd.log ，将当天的日志，按照每行一个日志记录，存放于文件中
+	 */
+	public FileDataSource(String path) {
+		setPath(path);
+	}
 	
 	/**
 	 * 初始化文件方式存储
@@ -35,10 +45,7 @@ public class FileDataSource implements DatasourceInterface{
 			return;
 		}
 		
-		this.path = config.get("path");
-		if(this.path != null && this.path.trim().equals("")) {
-			this.path = null;
-		}
+		setPath(config.get("path"));
 		
 //		this.name = config.get("name");
 //		//如果name不设置，默认是 log ，按小时生成的日志文件名字为 log_2022-12-13_14.log
@@ -47,6 +54,14 @@ public class FileDataSource implements DatasourceInterface{
 //				this.name = "log";
 //			}
 //		}
+	}
+	
+	private void setPath(String path) {
+		if(path == null || path.trim().equals("")) {
+			this.path = null;
+		}else {
+			this.path = path;
+		}
 	}
 	
 	@Override

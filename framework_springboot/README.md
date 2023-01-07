@@ -59,8 +59,9 @@ log.tableName=useraction
 #
 # 如果此不设置，默认不做任何动作
 # 下面便是具体针对自带默认的写出日志文件这种存储方式的配置了
-# 保存日志的路径，格式如 /mnt/tomcat8/logs/ 、或者windows服务器的话路径如 C:\\Users\\Administrator\\Desktop\\log\\  注意最后的斜杠不能拉下。如果不设置此，则不开启，日志不会写出到日志文件，没任何动作。
-# 每天都会创建一个日志文件，当天的日志保存在对应天数的日志文件中
+# 保存日志的目录，格式如 /mnt/tomcat8/logs/ 、或者windows服务器的话路径如 C:\\Users\\Administrator\\Desktop\\log\\  注意最后的斜杠不能拉下。如果不设置此，则不开启，日志不会写出到日志文件，没任何动作。 
+# 如果你服务器时linux，开发环境时windows，为了省事你也可以直接使用linux路径如 /mnt/tomcat8/logs/ 在windows中也能正常运行
+# 每天都会自动创建一个日志文件，当天的日志保存在对应天数的日志文件中。比如你设置的路径是  /mnt/tomcat8/logs/ 那么日志在保存时会自动创建一个文件 /mnt/tomcat8/logs/tablename_yyyy-mm-dd.log ，将当天的日志，按照每行一个日志记录，存放于文件中
 log.datasource.file.path=C:\\Users\\Administrator\\Desktop\\log\\
 #log.datasource.file.path=/mnt/tomcat8/logs/
 ````

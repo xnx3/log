@@ -104,13 +104,12 @@
 	<dependencies>  
 		<dependency>
 			<groupId>cn.zvo.log</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>log-core</artifactId>
 			<version>1.0</version>
 		</dependency>
-		
 		<dependency> 
 			<groupId>cn.zvo.log</groupId>
-			<artifactId>datasource.elasticsearch</artifactId>
+			<artifactId>log-datasource-elasticsearch</artifactId>
 			<version>1.0</version>
 		</dependency>
 	</dependencies>
