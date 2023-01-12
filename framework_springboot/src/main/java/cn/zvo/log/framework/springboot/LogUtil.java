@@ -2,6 +2,7 @@ package cn.zvo.log.framework.springboot;
 
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import cn.zvo.log.vo.LogListVO;
 public class LogUtil implements CommandLineRunner{
 	public static Log log;
     @Autowired
+    @Qualifier("LogApplicationConfig")
     private ApplicationConfig config;
 
     /**
