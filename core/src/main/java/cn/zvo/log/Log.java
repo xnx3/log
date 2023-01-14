@@ -86,7 +86,7 @@ public class Log {
 	public DatasourceInterface getDatasource() {
 		if(datasource == null) {
 			//没有，默认使用控制台输出方式
-			datasource = new FileDataSource(null);
+			datasource = new FileDataSource("");
 		}
 		return datasource;
 	}

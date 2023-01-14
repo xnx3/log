@@ -1,11 +1,7 @@
 package cn.zvo.log.framework.springboot;
 
 import java.util.Map;
-
 import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +17,7 @@ import cn.zvo.log.vo.LogListVO;
 public class LogUtil implements CommandLineRunner{
 	public static Log log;
     @Resource
-    private ApplicationConfig config;
+    private ApplicationConfig logApplicationConfig;
 
     /**
      * 加载配置 {@link ApplicationConfig} （aplication.properties/yml）文件的配置数据，通过其属性来决定使用何种配置。
@@ -29,7 +25,7 @@ public class LogUtil implements CommandLineRunner{
      * @param config
      */
     public void loadConfig(ApplicationConfig config) {
-    	log.loadConfig(this.config); //加载application配置
+    	log.loadConfig(config); //加载application配置
     }
     
     /**
@@ -114,11 +110,11 @@ public class LogUtil implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		com.xnx3.Log.debug("load log config by application.properties / yml : "+this.config);
+		com.xnx3.Log.debug("load log config by application.properties / yml : "+this.logApplicationConfig);
 		if(log == null) {
 			log = new Log();
 		}
-    	loadConfig(this.config); //加载application配置
+    	loadConfig(this.logApplicationConfig); //加载application配置
 	}
 	
 }
