@@ -97,6 +97,12 @@ public class FileDataSource implements DatasourceInterface{
 	public LogListVO list(String table, String query,int everyPageNumber, int currentPage) {
 		LogListVO vo = new LogListVO();
 		
+		if(this.path == null || this.path.equals("")) {
+			//未开启日志
+			vo.setBaseVO(BaseVO.FAILURE, "日志功能未启用");
+			return vo;
+		}
+		
 		//文件方式存储的，禁止使用查询命令
 		if(query != null && query.trim().length() > 0) {
 			vo.setBaseVO(BaseVO.FAILURE, "log采用默认的文件存储方式，无法根据查询条件筛选");
