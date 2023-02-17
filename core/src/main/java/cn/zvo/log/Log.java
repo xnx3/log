@@ -234,7 +234,7 @@ public class Log {
 		}
 		
 		if(submit){
-			System.out.println("log submit "+size()+", table:"+table+", datasource:"+getDatasource().getClass().getName());
+			//System.out.println("log submit "+size()+", table:"+table+", datasource:"+getDatasource().getClass().getName());
 			
 			this.lastSubmitTime = currentTime;	//赋予最后一次提交时间
 			boolean submitResult = commit();
