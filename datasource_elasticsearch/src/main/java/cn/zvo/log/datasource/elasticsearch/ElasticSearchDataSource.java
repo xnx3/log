@@ -23,6 +23,7 @@ import com.xnx3.j2ee.util.ConsoleUtil;
 import com.xnx3.j2ee.vo.ActionLogListVO;
 import cn.zvo.log.DatasourceInterface;
 import cn.zvo.log.vo.LogListVO;
+import cn.zvo.page.Page;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -176,7 +177,9 @@ public class ElasticSearchDataSource implements DatasourceInterface{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		Page page = new Page((int) count, everyPageNumber, request);
+//		Page page = new Page((int) count, everyPageNumber);
+		Page page = new Page((int) count, everyPageNumber, currentPage);
+		vo.setPage(page);
 
 		//limit查询条数
 		int limitNumber = everyPageNumber;
