@@ -8,13 +8,13 @@ SpringBoot中使用的示例： （也可以在普通java项目或别的框架�
 	<artifactId>log-core</artifactId>
 	<version>1.1</version>
 </dependency>
-<!-- 在 SpringBoot 框架中的快速使用。 （在不同的框架中使用，这里引入的framework.xxx也不同） -->
+<!-- 在 SpringBoot 框架中的快速使用。 （在不同的框架中使用，这里引入的framework.xxx也不同） https://github.com/xnx3/log/tree/main/framework_springboot -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-framework-springboot</artifactId>
 	<version>1.0</version>
 </dependency> 
-<!-- 阿里云 sls 支持 -->
+<!-- 阿里云 sls 支持 https://github.com/xnx3/log/tree/main/datasource_aliyunSLS -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-datasource-aliyunSLS</artifactId>
