@@ -46,11 +46,11 @@
 			<version>1.0</version>
 		</dependency> 
 		<!-- 加入 elasticsearch 存储的实现。 （存储到哪，这里artifactId就引入的哪里的 datasource.xxx 如果单纯存储到本地，这里直接就不用在引入这个 datasource.xxx 了，core中默认带了本地文件存储 FileDatasource 的实现） -->
-		<!-- <dependency> 
+		<dependency> 
 		    <groupId>cn.zvo.log</groupId>
 		    <artifactId>log-datasource-elasticsearch</artifactId>
 		    <version>1.0</version>
-		</dependency>  -->
+		</dependency>
 		
 		
 	</dependencies>
