@@ -11,14 +11,19 @@ import net.sf.json.JSONArray;
  *
  */
 public class LogListVO extends BaseVO {
-	private JSONArray jsonArray;	//json数组，数组内有json对象，每个json对象都是一列数据。数据都存在这里。
+	/**
+	 * 【旧的，已废弃， 使用list】json数组，数组内有json对象，每个json对象都是一列数据。数据都存在这里。
+	 * @deprecated
+	 */
+	private JSONArray jsonArray;	
 	private Page page;
+	private JSONArray list; 	//列表数据，也就是之前的 jsonArray
 	
 	public JSONArray getJsonArray() {
-		return jsonArray;
+		return list;
 	}
-	public void setJsonArray(JSONArray jsonArray) {
-		this.jsonArray = jsonArray;
+	public void setJsonArray(JSONArray list) {
+		this.list = list;
 	}
 	public Page getPage() {
 		return page;
@@ -27,9 +32,15 @@ public class LogListVO extends BaseVO {
 		this.page = page;
 	}
 	
+	public JSONArray getList() {
+		return list;
+	}
+	public void setList(JSONArray list) {
+		this.list = list;
+	}
 	@Override
 	public String toString() {
-		return "LogListVO [jsonArray=" + jsonArray + ", page=" + page + "]";
+		return "LogListVO [list=" + list + ", page=" + page + "]";
 	}
 	
 }
