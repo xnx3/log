@@ -6,7 +6,7 @@
 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-framework-springboot</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 	<packaging>jar</packaging>
 
 	<description>java file upload</description>
@@ -105,7 +105,7 @@
 		<dependency>
 			<groupId>cn.zvo.log</groupId>
 			<artifactId>log-core</artifactId>
-			<version>1.0</version>
+			<version>1.2</version>
 		</dependency>
 	
 		<!-- 本地的基础功能如文件上传、数据库操作等。这个wm文档及源码在  http://wm.zvo.cn  -->
