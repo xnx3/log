@@ -7,19 +7,19 @@ SpringBoot中使用的示例： （也可以在普通java项目或别的框架�
 <dependency> 
     <groupId>cn.zvo.log</groupId>
     <artifactId>log-core</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 </dependency>
 <!-- 在 SpringBoot 框架中的快速使用。 （在不同的框架中使用，这里引入的framework.xxx也不同） https://github.com/xnx3/log/tree/main/framework_springboot -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-framework-springboot</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 </dependency> 
 <!-- 加入elasticsearch的实现。 （存储到哪，这里artifactId就引入的哪里的 datasource.xxx 另外，core中默认带控制台将日志实时打印出来） https://github.com/xnx3/log/tree/main/datasource_elasticsearch  -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-datasource-elasticsearch</artifactId>
-	<version>1.0</version>
+	<version>1.0.1</version>
 </dependency>
 ````
 

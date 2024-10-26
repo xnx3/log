@@ -11,7 +11,7 @@
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-core</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 </dependency>
 ````
 
@@ -41,7 +41,7 @@ log.add(params);
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-datasource-elasticsearch</artifactId>
-	<version>1.0</version>
+	<version>1.0.1</version>
 </dependency>
 ````
 
@@ -63,7 +63,7 @@ log.setLogInterface(new ElasticSearchDataSource("127.0.0.1", 9200, "http", null,
 <dependency> 
     <groupId>cn.zvo.log</groupId>
     <artifactId>log-framework-springboot</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
 </dependency> 
 ````
 

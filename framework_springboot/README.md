@@ -9,13 +9,13 @@ springboot 项目中使用
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-core</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 </dependency>
 <!-- 在 SpringBoot 框架中的快速使用。 （在不同的框架中使用，这里引入的framework.xxx也不同） -->
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-framework-springboot</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 </dependency> 
 ````
 
@@ -90,7 +90,7 @@ log.datasource.file.path=C:\\Users\\Administrator\\Desktop\\log\\
 <dependency> 
 	<groupId>cn.zvo.log</groupId>
 	<artifactId>log-datasource-elasticsearch</artifactId>
-	<version>1.0</version>
+	<version>1.0.1</version>
 </dependency>
 ````
 
